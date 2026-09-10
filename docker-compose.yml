@@ -1,0 +1,25 @@
+name: gossip
+
+services:
+  gossip_db:
+    image: postgres:17-alpine
+    container_name: postgres_db
+    restart: always
+    environment: 
+      POSTGRES_USER: gossip
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: gossip_db
+    ports:
+      - "5666:5432"
+    volumes:
+      - gossip_pg_data:/var/lib/postgresql/data
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U gossip -d gossip_db"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+
+volumes:
+  gossip_pg_data:
+     

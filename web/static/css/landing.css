@@ -1,0 +1,134 @@
+/* ==========================================================================
+   landing.css — marketing page (web/index.html) only.
+   ========================================================================== */
+
+.site-header {
+  padding: 1.4rem 0;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-nav {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  flex: 1;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: clamp(3rem, 12vh, 7rem) 0 clamp(2rem, 6vh, 4rem);
+}
+
+.hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6.5vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 650;
+  max-width: 16ch;
+  margin-inline: auto;
+  text-wrap: balance;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--muted);
+}
+
+.hero__sub {
+  color: var(--ink-2);
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  max-width: 46ch;
+  margin: 1.4rem auto 2.2rem;
+  text-wrap: balance;
+}
+
+.hero__cta {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- features ---------- */
+
+.features {
+  padding: 3rem 0 4rem;
+}
+
+.features__grid {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  overflow: hidden;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 720px) {
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature {
+  background: var(--surface);
+  padding: 1.8rem;
+}
+
+.feature svg {
+  width: 22px;
+  height: 22px;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.feature h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.01em;
+}
+
+.feature p {
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+/* ---------- footer ---------- */
+
+.site-footer {
+  margin-top: auto;
+  padding: 2rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.site-footer .container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.site-footer p {
+  font-size: 0.82rem;
+  color: var(--muted);
+}

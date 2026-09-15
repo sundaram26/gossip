@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>voice→voice — talk to your AI</title>
+    <meta name="description" content="A minimalist voice agent. Press the mic, speak naturally, hear the answer.">
+    <link rel="icon" type="image/svg+xml" href="/static/icon.svg">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/landing.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container">
+        <a class="logo" href="/">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 10v4M8 6v12M12 9v6M16 5v14M20 10v4"/>
+          </svg>
+          voice→voice
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a class="btn btn--ghost btn--sm" href="/app/">Open the app</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero container">
+        <p class="hero__eyebrow">// a voice agent, nothing more</p>
+        <h1>Just speak.<br><em>We&rsquo;ll handle the words.</em></h1>
+        <p class="hero__sub">
+          voice→voice is a focused space to talk with an AI. Press the mic,
+          speak naturally, and listen. No feeds, no clutter.
+        </p>
+        <div class="hero__cta">
+          <a class="btn" href="/app/">Start talking →</a>
+        </div>
+      </section>
+
+      <section class="features container" aria-label="Highlights">
+        <div class="features__grid">
+          <article class="feature">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 10v4"/>
+            </svg>
+            <h3>Natural in, natural out</h3>
+            <p>Speak as you would to a person — transcripts appear instantly and spoken replies follow.</p>
+          </article>
+          <article class="feature">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+              <path d="M13 2.5 4.5 13.5h6L10 21.5l8.5-11h-6l.5-8Z"/>
+            </svg>
+            <h3>Fast round-trip</h3>
+            <p>Your voice goes straight to the speech API and responses come back as soon as they&rsquo;re ready.</p>
+          </article>
+          <article class="feature">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l7 2.8v5.2c0 4.6-3 8.6-7 10-4-1.4-7-5.4-7-10V5.8L12 3Z"/>
+              <path d="M9.3 12.2l1.9 1.9 3.6-4.2"/>
+            </svg>
+            <h3>No account, no noise</h3>
+            <p>No sign-up, no history panels, no settings maze — just you and the conversation.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>voice→voice — an experiment in voice-first interfaces.</p>
+        <p>Built with htmx &amp; Go</p>
+      </div>
+    </footer>
+  </body>
+</html>

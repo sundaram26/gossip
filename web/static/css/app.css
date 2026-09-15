@@ -1,0 +1,261 @@
+/* ==========================================================================
+   app.css — the voice workspace (web/app/index.html) only.
+   Layout: fixed viewport height; #conversation scrolls internally; the
+   dock (mic) stays pinned at the bottom.
+   ========================================================================== */
+
+body {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.topbar {
+  flex: none;
+  padding: 0.9rem 0;
+}
+
+.topbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- conversation ---------- */
+
+.conversation {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  width: min(44rem, 100%);
+  margin-inline: auto;
+  padding: 2rem 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  /* soft fade at the top to hint scrollability */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 24px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 24px);
+}
+
+.msg {
+  max-width: min(85%, 34rem);
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-m);
+  font-size: 0.95rem;
+  animation: msg-in 0.3s var(--ease);
+}
+
+.msg > * + * {
+  margin-top: 0.4em;
+}
+
+.msg--assistant {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  border-bottom-left-radius: 4px;
+}
+
+.msg--user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-bottom-right-radius: 4px;
+}
+
+.msg__meta {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.7rem;
+  opacity: 0.6;
+  font-family: var(--font-mono);
+}
+
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* ---------- dock ---------- */
+
+.dock {
+  flex: none;
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  padding: 0.5rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 65%, transparent);
+}
+
+/* level meter — visible and animated only while recording */
+.meter {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+
+.dock[data-state="recording"] .meter {
+  opacity: 1;
+}
+
+.meter span {
+  width: 3px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--ink);
+  transform: scaleY(calc(1 + var(--level, 0) * var(--f, 1) * 5));
+  transform-origin: center;
+  transition: transform 90ms linear;
+  will-change: transform;
+}
+
+/* per-bar factors give the meter an organic, asymmetric look */
+.meter span:nth-child(1) { --f: 0.7; }
+.meter span:nth-child(2) { --f: 0.95; }
+.meter span:nth-child(3) { --f: 0.55; }
+.meter span:nth-child(4) { --f: 1; }
+.meter span:nth-child(5) { --f: 0.6; }
+
+/* ---------- the orb ---------- */
+
+.orb {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-1);
+  transition:
+    transform 0.18s var(--ease),
+    background 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.orb:hover {
+  transform: scale(1.04);
+}
+
+.orb:active {
+  transform: scale(0.97);
+}
+
+.orb:focus-visible {
+  outline-offset: 4px;
+}
+
+.orb:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.orb svg {
+  width: 30px;
+  height: 30px;
+}
+
+/* icon visibility is driven by the dock state */
+.orb .icon-stop,
+.orb .icon-spin {
+  display: none;
+}
+
+.dock[data-state="recording"] .orb {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--danger) 12%, transparent);
+}
+
+.dock[data-state="recording"] .icon-mic { display: none; }
+.dock[data-state="recording"] .icon-stop { display: block; }
+
+.dock[data-state="processing"] .orb {
+  opacity: 0.85;
+  cursor: wait;
+}
+
+.dock[data-state="processing"] .icon-mic { display: none; }
+.dock[data-state="processing"] .icon-spin {
+  display: block;
+  animation: orb-rotate 1s linear infinite;
+}
+
+@keyframes orb-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* pulsing rings while recording */
+.orb::before,
+.orb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--danger);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dock[data-state="recording"] .orb::before {
+  animation: orb-ring 2.4s var(--ease) infinite;
+}
+
+.dock[data-state="recording"] .orb::after {
+  animation: orb-ring 2.4s var(--ease) 1.2s infinite;
+}
+
+@keyframes orb-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* ---------- status line ---------- */
+
+.status {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+  min-height: 1.4em;
+}
+
+/* ---------- short viewports ---------- */
+
+@media (max-height: 560px) {
+  .orb {
+    width: 64px;
+    height: 64px;
+  }
+  .orb svg {
+    width: 24px;
+    height: 24px;
+  }
+  .meter {
+    display: none;
+  }
+}

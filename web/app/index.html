@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>App — voice→voice</title>
+    <meta name="description" content="Talk with the voice→voice agent.">
+    <link rel="icon" type="image/svg+xml" href="/static/icon.svg">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="/static/vendor/htmx.min.js" defer></script>
+    <script type="module" src="/static/js/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="topbar">
+      <div class="container">
+        <a class="logo" href="/" aria-label="voice→voice — back to home">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 10v4M8 6v12M12 9v6M16 5v14M20 10v4"/>
+          </svg>
+          voice→voice
+        </a>
+        <span class="pill" id="connPill" data-tone="">
+          <span class="dot" aria-hidden="true"></span>
+          <span data-label>service ready</span>
+        </span>
+      </div>
+    </header>
+
+    <main id="main" class="stage">
+      <!--
+        Server-rendered conversation. The STT endpoint returns HTML partials
+        (e.g. .msg--user with the transcript, .msg--assistant with the reply)
+        which htmx appends here. See static/css/app.css + ../README.md.
+      -->
+      <div id="conversation" class="conversation" aria-live="polite" aria-label="Conversation">
+        <div class="msg msg--assistant">
+          <p>Hey — I&rsquo;m listening. Tap the microphone below and start talking.</p>
+        </div>
+      </div>
+
+      <div class="dock" id="voiceDock" data-state="idle">
+        <div class="meter" id="meter" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <button class="orb" id="orb" type="button" aria-label="Start recording" aria-pressed="false" aria-busy="false">
+          <svg class="icon-mic" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="2.5" width="6" height="11" rx="3"/>
+            <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8 21h8"/>
+          </svg>
+          <svg class="icon-stop" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="7" y="7" width="10" height="10" rx="2.5"/>
+          </svg>
+          <svg class="icon-spin" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 3a9 9 0 1 0 9 9"/>
+          </svg>
+        </button>
+
+        <p class="status" id="voiceStatus" role="status">Tap the microphone to speak</p>
+        <noscript><p class="status">This app needs JavaScript to capture your microphone.</p></noscript>
+      </div>
+    </main>
+
+    <!--
+      The API connection.
+
+      Flow: app.js captures audio → dispatches `recording-ready` on <body> →
+      htmx POSTs this form (the file is attached via the `htmx:configRequest`
+      hook) → the server responds with an HTML fragment which is appended to
+      #conversation. To point at your real API, change hx-post only.
+    -->
+    <form id="stt-form"
+          method="post"
+          enctype="multipart/form-data"
+          class="visually-hidden"
+          aria-hidden="true"
+          hx-post="/api/v1/stt"
+          hx-encoding="multipart/form-data"
+          hx-request='{"timeout": 30000}'
+          hx-trigger="recording-ready from:body"
+          hx-target="#conversation"
+          hx-swap="beforeend scroll:bottom">
+      <input type="hidden" name="session_id" id="sessionId" value="">
+    </form>
+
+    <div id="toasts" class="toasts" aria-live="polite"></div>
+  </body>
+</html>
